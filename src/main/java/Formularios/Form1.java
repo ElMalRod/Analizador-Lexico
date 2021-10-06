@@ -286,44 +286,44 @@ public class Form1 extends javax.swing.JFrame {
             
                 areaTexto.append(lexema.getLexema()+" "+lexema.getTipo());
 
-            } //Si es decimal lo pinta de celeste
+            } //Si es decimal 
             else if (lexema.getTipo().equals("Decimal")) {
         
                 areaTexto.append(lexema.getLexema()+" "+lexema.getTipo());
-            } //Si es cadena lo pinta de gris
+            } //Si es cadena 
             else if (lexema.getTipo().equals("Cadena")) {
            
                 areaTexto.append(lexema.getLexema()+" "+lexema.getTipo());
-            } //Si es booleano lo pinta de naranja
+            } //Si es booleano 
             else if (lexema.getTipo().equals("Booleano")) {
             
                 areaTexto.append(lexema.getLexema()+" "+lexema.getTipo());
-            } //Si es caracter lo pinta de caracter
+            } //Si es caracter 
             else if (lexema.getTipo().equals("Caracter")) {
             
-                areaTexto.append(lexema.getLexema()+" "+lexema.getTipo());
-            } //Si es un operador lo pinta de azul
+                areaTexto.append(lexema.getLexema()+" "+lexema.getTipo()); 
+            } //Si es un operador 
             else if (lexema.getTipo().equals("Operador")) {
                
                 areaTexto.append(lexema.getLexema()+" "+lexema.getTipo());
-            } //Si es una asignacion lo pinta de rosado
+            } //Si es una asignacion 
             else if (lexema.getTipo().equals("Asignacion")) {
           
                 areaTexto.append(lexema.getLexema()+" "+lexema.getTipo());
-            } //Si es un comentario lo pinta de roja
+            } //Si es un comentario 
             else if (lexema.getTipo().equals("Comentario")) {
              
                 areaTexto.append(lexema.getLexema()+" "+lexema.getTipo());
-            } //Si es una palabra reservada lo pinta de verde
+            }
             else if (lexema.getTipo().equals("Error")) {
               
                 areaTexto.append(lexema.getLexema());
                 areaErrores.append(contErrores + ") " + lexema.getLexema()+" "+lexema.getTipo());
                 contErrores++;
                 areaErrores.append("\n");
-            } //Inserta palabras reservadas
+            } 
             else if (!lexema.getTipo().equals("Enter")) {
-                //areaTexto.SelectionColor = Color.Black;
+               
                 areaTexto.append(lexema.getLexema());
             }
 
