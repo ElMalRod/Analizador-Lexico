@@ -1,4 +1,4 @@
- /*
+/*
  * To change this license header, choose License Headers in Project Properties.
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
@@ -9,9 +9,13 @@ import Clases.Archivo;
 import Clases.Automata;
 import Clases.Lexema;
 import java.awt.Color;
+import java.awt.Component;
 import java.awt.Image;
+import java.awt.event.KeyEvent;
+import java.awt.event.KeyListener;
 import java.awt.image.BufferedImage;
 import java.io.File;
+import java.io.FileWriter;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.logging.Level;
@@ -20,7 +24,11 @@ import javax.imageio.ImageIO;
 import javax.swing.ImageIcon;
 import javax.swing.JFileChooser;
 import javax.swing.JOptionPane;
+import javax.swing.JTextArea;
 import javax.swing.text.BadLocationException;
+import javax.swing.text.Caret;
+import javax.swing.text.DefaultHighlighter;
+import javax.swing.text.Highlighter;
 
 /**
  *
@@ -38,13 +46,14 @@ public class Form1 extends javax.swing.JFrame {
     ImageIcon Boton4 = new ImageIcon("salvar.png");
     ImageIcon Fondo1 = new ImageIcon("Fondo1.jpg");
     ImageIcon Icono = new ImageIcon("Error.png");
+    ImageIcon lupa = new ImageIcon("Lupa.png");
 
     /**
      * Creates new form Form1
      */
     public Form1() {
         initComponents();
-        this.setLocationRelativeTo(null);
+
         Trasparencia();
         Cargar.setIcon(new ImageIcon(Boton1.getImage().getScaledInstance(40, 40, Image.SCALE_SMOOTH)));
         Ejecutar.setIcon(new ImageIcon(Boton2.getImage().getScaledInstance(40, 40, Image.SCALE_SMOOTH)));
@@ -52,6 +61,7 @@ public class Form1 extends javax.swing.JFrame {
         Guardar.setIcon(new ImageIcon(Boton4.getImage().getScaledInstance(40, 40, Image.SCALE_SMOOTH)));
         IconoError.setIcon(new ImageIcon(Icono.getImage().getScaledInstance(40, 40, Image.SCALE_SMOOTH)));
         Fondo.setIcon(new ImageIcon(Fondo1.getImage().getScaledInstance(1200, 690, Image.SCALE_SMOOTH)));
+        Buscar.setIcon(new ImageIcon(lupa.getImage().getScaledInstance(25, 32, Image.SCALE_SMOOTH)));
 
     }
 
@@ -71,6 +81,9 @@ public class Form1 extends javax.swing.JFrame {
         Ejecutar = new javax.swing.JButton();
         Limpiar = new javax.swing.JButton();
         Guardar = new javax.swing.JButton();
+        estado = new javax.swing.JLabel();
+        Buscar = new javax.swing.JButton();
+        txtbuscar = new javax.swing.JTextField();
         IconoError = new javax.swing.JLabel();
         jLabel1 = new javax.swing.JLabel();
         jScrollPane1 = new javax.swing.JScrollPane();
@@ -87,59 +100,70 @@ public class Form1 extends javax.swing.JFrame {
         lblLinea.setFont(new java.awt.Font("Dialog", 0, 14)); // NOI18N
         lblLinea.setForeground(new java.awt.Color(255, 255, 255));
         lblLinea.setText("Linea");
-        jPanel1.add(lblLinea, new org.netbeans.lib.awtextra.AbsoluteConstraints(220, 320, -1, -1));
+        jPanel1.add(lblLinea, new org.netbeans.lib.awtextra.AbsoluteConstraints(270, 330, -1, -1));
 
         lblColumna.setBackground(new java.awt.Color(255, 255, 255));
         lblColumna.setFont(new java.awt.Font("Dialog", 0, 14)); // NOI18N
         lblColumna.setForeground(new java.awt.Color(255, 255, 255));
         lblColumna.setText("Columna");
-        jPanel1.add(lblColumna, new org.netbeans.lib.awtextra.AbsoluteConstraints(300, 320, -1, -1));
+        jPanel1.add(lblColumna, new org.netbeans.lib.awtextra.AbsoluteConstraints(350, 330, -1, -1));
 
         Cargar.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 CargarActionPerformed(evt);
             }
         });
-        jPanel1.add(Cargar, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 20, 80, 40));
+        jPanel1.add(Cargar, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 100, 80, 40));
 
         Ejecutar.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 EjecutarActionPerformed(evt);
             }
         });
-        jPanel1.add(Ejecutar, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 80, 80, 40));
+        jPanel1.add(Ejecutar, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 160, 80, 40));
 
         Limpiar.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 LimpiarActionPerformed(evt);
             }
         });
-        jPanel1.add(Limpiar, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 200, 80, 40));
+        jPanel1.add(Limpiar, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 280, 80, 40));
 
         Guardar.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 GuardarActionPerformed(evt);
             }
         });
-        jPanel1.add(Guardar, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 140, 80, 40));
-        jPanel1.add(IconoError, new org.netbeans.lib.awtextra.AbsoluteConstraints(80, 390, 50, 50));
+        jPanel1.add(Guardar, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 220, 80, 40));
+
+        estado.setForeground(new java.awt.Color(255, 255, 255));
+        jPanel1.add(estado, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 40, 190, 40));
+
+        Buscar.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                BuscarActionPerformed(evt);
+            }
+        });
+        jPanel1.add(Buscar, new org.netbeans.lib.awtextra.AbsoluteConstraints(220, 10, 30, 30));
+        jPanel1.add(txtbuscar, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 10, 240, 30));
+        jPanel1.add(IconoError, new org.netbeans.lib.awtextra.AbsoluteConstraints(110, 470, 50, 50));
 
         jLabel1.setFont(new java.awt.Font("Dialog", 0, 14)); // NOI18N
         jLabel1.setForeground(new java.awt.Color(255, 255, 255));
         jLabel1.setText("Errores Lexicos:");
-        jPanel1.add(jLabel1, new org.netbeans.lib.awtextra.AbsoluteConstraints(50, 450, 110, 20));
+        jPanel1.add(jLabel1, new org.netbeans.lib.awtextra.AbsoluteConstraints(80, 550, 110, 20));
 
         areaTexto.setColumns(20);
         areaTexto.setRows(5);
         jScrollPane1.setViewportView(areaTexto);
 
-        jPanel1.add(jScrollPane1, new org.netbeans.lib.awtextra.AbsoluteConstraints(210, 20, 710, 290));
+        jPanel1.add(jScrollPane1, new org.netbeans.lib.awtextra.AbsoluteConstraints(260, 30, 710, 290));
 
         areaErrores.setColumns(20);
         areaErrores.setRows(5);
         jScrollPane3.setViewportView(areaErrores);
 
-        jPanel1.add(jScrollPane3, new org.netbeans.lib.awtextra.AbsoluteConstraints(210, 360, 710, 300));
+        jPanel1.add(jScrollPane3, new org.netbeans.lib.awtextra.AbsoluteConstraints(260, 360, 710, 300));
         jPanel1.add(Fondo, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 0, 1130, 690));
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
@@ -181,7 +205,6 @@ public class Form1 extends javax.swing.JFrame {
         tokens = (ArrayList) analizador.getListaLexema().clone();
         //Metodo para mostrar tokes
         mostrarTokens();
-      
 
         //Verifica si existen errores
         if (verificarErrores()) {
@@ -193,7 +216,8 @@ public class Form1 extends javax.swing.JFrame {
 
     private void GuardarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_GuardarActionPerformed
         // TODO add your handling code here:
-        archivo.guardarArchivo();
+
+        Exportar();
     }//GEN-LAST:event_GuardarActionPerformed
 
     private void LimpiarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_LimpiarActionPerformed
@@ -201,6 +225,11 @@ public class Form1 extends javax.swing.JFrame {
         areaTexto.setText(null);
         areaErrores.setText(null);
     }//GEN-LAST:event_LimpiarActionPerformed
+
+    private void BuscarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_BuscarActionPerformed
+        // TODO add your handling code here:
+        buscarTexto();
+    }//GEN-LAST:event_BuscarActionPerformed
 
     /**
      * @param args the command line arguments
@@ -246,6 +275,8 @@ public class Form1 extends javax.swing.JFrame {
         Limpiar.setContentAreaFilled(false);
         Guardar.setOpaque(false);
         Guardar.setContentAreaFilled(false);
+        Buscar.setOpaque(false);
+        Buscar.setContentAreaFilled(false);
     }
 
     /*Regresa si encuentra errores*/
@@ -266,8 +297,8 @@ public class Form1 extends javax.swing.JFrame {
 
         int firstChar = areaTexto.getLineStartOffset(line);
         int column = index - firstChar;
-        lblLinea.setText("Linea: "+(line+1));
-        lblColumna.setText("Columna: "+column);
+        lblLinea.setText("Linea: " + (line + 1));
+        lblColumna.setText("Columna: " + column);
     }
 
     /* Muestra y pinta los tokens */
@@ -283,47 +314,45 @@ public class Form1 extends javax.swing.JFrame {
             Lexema lexema = (Lexema) tokens.get(i);
             //Si es entero lo pinta de morado
             if (lexema.getTipo().equals("Entero")) {
-            
-                areaTexto.append(lexema.getLexema()+" "+lexema.getTipo());
+
+                areaTexto.append(lexema.getLexema() + " " + lexema.getTipo());
 
             } //Si es decimal 
             else if (lexema.getTipo().equals("Decimal")) {
-        
-                areaTexto.append(lexema.getLexema()+" "+lexema.getTipo());
+
+                areaTexto.append(lexema.getLexema() + " " + lexema.getTipo());
             } //Si es cadena 
             else if (lexema.getTipo().equals("Cadena")) {
-           
-                areaTexto.append(lexema.getLexema()+" "+lexema.getTipo());
+
+                areaTexto.append(lexema.getLexema() + " " + lexema.getTipo());
             } //Si es booleano 
             else if (lexema.getTipo().equals("Booleano")) {
-            
-                areaTexto.append(lexema.getLexema()+" "+lexema.getTipo());
+
+                areaTexto.append(lexema.getLexema() + " " + lexema.getTipo());
             } //Si es caracter 
             else if (lexema.getTipo().equals("Caracter")) {
-            
-                areaTexto.append(lexema.getLexema()+" "+lexema.getTipo()); 
+
+                areaTexto.append(lexema.getLexema() + " " + lexema.getTipo());
             } //Si es un operador 
             else if (lexema.getTipo().equals("Operador")) {
-               
-                areaTexto.append(lexema.getLexema()+" "+lexema.getTipo());
+
+                areaTexto.append(lexema.getLexema() + " " + lexema.getTipo());
             } //Si es una asignacion 
             else if (lexema.getTipo().equals("Asignacion")) {
-          
-                areaTexto.append(lexema.getLexema()+" "+lexema.getTipo());
+
+                areaTexto.append(lexema.getLexema() + " " + lexema.getTipo());
             } //Si es un comentario 
             else if (lexema.getTipo().equals("Comentario")) {
-             
-                areaTexto.append(lexema.getLexema()+" "+lexema.getTipo());
-            }
-            else if (lexema.getTipo().equals("Error")) {
-              
+
+                areaTexto.append(lexema.getLexema() + " " + lexema.getTipo());
+            } else if (lexema.getTipo().equals("Error")) {
+
                 areaTexto.append(lexema.getLexema());
-                areaErrores.append(contErrores + ") " + lexema.getLexema()+" "+lexema.getTipo());
+                areaErrores.append(contErrores + ") " + lexema.getLexema() + " " + lexema.getTipo());
                 contErrores++;
                 areaErrores.append("\n");
-            } 
-            else if (!lexema.getTipo().equals("Enter")) {
-               
+            } else if (!lexema.getTipo().equals("Enter")) {
+
                 areaTexto.append(lexema.getLexema());
             }
 
@@ -333,13 +362,48 @@ public class Form1 extends javax.swing.JFrame {
             } else {
                 areaTexto.append(" ");
             }
-           
 
+        }
+    }
+
+    public void Exportar() {
+        try {
+            JFileChooser archivo = new JFileChooser(System.getProperty("user.dir"));
+            archivo.showSaveDialog(this);
+            if (archivo.getSelectedFile() != null) {
+                try (FileWriter guardado = new FileWriter(archivo.getSelectedFile())) {
+                    guardado.write(areaTexto.getText());
+                    JOptionPane.showMessageDialog(rootPane, "El archivo fue guardado con éxito en la ruta establecida");
+                }
+            }
+        } catch (IOException ex) {
+            JOptionPane.showMessageDialog(this, ex.getMessage());
+        }
+    }
+
+    public void buscarTexto() {
+
+        String s = txtbuscar.getText();
+
+        if (s.length() > 0) {
+            String contenido = areaTexto.getText();
+            int index = contenido.indexOf(s, 0);
+            if (index >= 0) {
+                int end = index + s.length();
+                areaTexto.setCaretPosition(end);
+                estado.setText("'" + s + "' fue encontrado.");
+            } else {
+                txtbuscar.setBackground(Color.ORANGE);
+                estado.setText("'" + s + "' no se ha encontrado.");
+            }
+        } else {
+            estado.setText("Digite la palabra a buscar.");
         }
     }
 
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JButton Buscar;
     private javax.swing.JButton Cargar;
     private javax.swing.JButton Ejecutar;
     private javax.swing.JLabel Fondo;
@@ -348,11 +412,13 @@ public class Form1 extends javax.swing.JFrame {
     private javax.swing.JButton Limpiar;
     private javax.swing.JTextArea areaErrores;
     private javax.swing.JTextArea areaTexto;
+    private javax.swing.JLabel estado;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JScrollPane jScrollPane3;
     private javax.swing.JLabel lblColumna;
     private javax.swing.JLabel lblLinea;
+    private javax.swing.JTextField txtbuscar;
     // End of variables declaration//GEN-END:variables
 }
