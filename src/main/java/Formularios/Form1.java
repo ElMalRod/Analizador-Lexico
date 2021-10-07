@@ -44,6 +44,7 @@ public class Form1 extends javax.swing.JFrame {
     ImageIcon Boton2 = new ImageIcon("jugar.png");
     ImageIcon Boton3 = new ImageIcon("Borrar.png");
     ImageIcon Boton4 = new ImageIcon("salvar.png");
+    ImageIcon Boton5 = new ImageIcon("Exportar.png");
     ImageIcon Fondo1 = new ImageIcon("Fondo1.jpg");
     ImageIcon Icono = new ImageIcon("Error.png");
     ImageIcon lupa = new ImageIcon("Lupa.png");
@@ -60,6 +61,7 @@ public class Form1 extends javax.swing.JFrame {
         Limpiar.setIcon(new ImageIcon(Boton3.getImage().getScaledInstance(40, 40, Image.SCALE_SMOOTH)));
         Guardar.setIcon(new ImageIcon(Boton4.getImage().getScaledInstance(40, 40, Image.SCALE_SMOOTH)));
         IconoError.setIcon(new ImageIcon(Icono.getImage().getScaledInstance(40, 40, Image.SCALE_SMOOTH)));
+        Exportar.setIcon(new ImageIcon(Boton5.getImage().getScaledInstance(40, 40, Image.SCALE_SMOOTH)));
         Fondo.setIcon(new ImageIcon(Fondo1.getImage().getScaledInstance(1200, 690, Image.SCALE_SMOOTH)));
         Buscar.setIcon(new ImageIcon(lupa.getImage().getScaledInstance(25, 32, Image.SCALE_SMOOTH)));
 
@@ -81,7 +83,9 @@ public class Form1 extends javax.swing.JFrame {
         Ejecutar = new javax.swing.JButton();
         Limpiar = new javax.swing.JButton();
         Guardar = new javax.swing.JButton();
+        Exportar = new javax.swing.JButton();
         estado = new javax.swing.JLabel();
+        jLabel2 = new javax.swing.JLabel();
         Buscar = new javax.swing.JButton();
         txtbuscar = new javax.swing.JTextField();
         IconoError = new javax.swing.JLabel();
@@ -136,8 +140,20 @@ public class Form1 extends javax.swing.JFrame {
         });
         jPanel1.add(Guardar, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 220, 80, 40));
 
+        Exportar.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                ExportarActionPerformed(evt);
+            }
+        });
+        jPanel1.add(Exportar, new org.netbeans.lib.awtextra.AbsoluteConstraints(1010, 270, 80, 40));
+
         estado.setForeground(new java.awt.Color(255, 255, 255));
         jPanel1.add(estado, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 40, 190, 40));
+
+        jLabel2.setFont(new java.awt.Font("Dialog", 0, 14)); // NOI18N
+        jLabel2.setForeground(new java.awt.Color(255, 255, 255));
+        jLabel2.setText("Exportar Reportes");
+        jPanel1.add(jLabel2, new org.netbeans.lib.awtextra.AbsoluteConstraints(990, 310, 120, 60));
 
         Buscar.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -231,6 +247,11 @@ public class Form1 extends javax.swing.JFrame {
         buscarTexto();
     }//GEN-LAST:event_BuscarActionPerformed
 
+    private void ExportarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_ExportarActionPerformed
+        // TODO add your handling code here:\
+        Reportes();
+    }//GEN-LAST:event_ExportarActionPerformed
+
     /**
      * @param args the command line arguments
      */
@@ -277,6 +298,8 @@ public class Form1 extends javax.swing.JFrame {
         Guardar.setContentAreaFilled(false);
         Buscar.setOpaque(false);
         Buscar.setContentAreaFilled(false);
+        Exportar.setOpaque(false);
+        Exportar.setContentAreaFilled(false);
     }
 
     /*Regresa si encuentra errores*/
@@ -380,6 +403,34 @@ public class Form1 extends javax.swing.JFrame {
             JOptionPane.showMessageDialog(this, ex.getMessage());
         }
     }
+    
+    public void Reportes() {
+        try {
+            JFileChooser archivo = new JFileChooser(System.getProperty("user.dir"));
+            archivo.showSaveDialog(this);
+            if (archivo.getSelectedFile() != null) {
+                try (FileWriter guardado = new FileWriter(archivo.getSelectedFile())) {
+                    guardado.write(areaTexto.getText());
+                    JOptionPane.showMessageDialog(rootPane, "El archivo fue guardado con éxito en la ruta establecida");
+                }
+            }
+        } catch (IOException ex) {
+            JOptionPane.showMessageDialog(this, ex.getMessage());
+        }
+        
+            try {
+            JFileChooser archivo = new JFileChooser(System.getProperty("user.dir"));
+            archivo.showSaveDialog(this);
+            if (archivo.getSelectedFile() != null) {
+                try (FileWriter guardado = new FileWriter(archivo.getSelectedFile())) {
+                    guardado.write(areaErrores.getText());
+                    JOptionPane.showMessageDialog(rootPane, "El archivo fue guardado con éxito en la ruta establecida");
+                }
+            }
+        } catch (IOException ex) {
+            JOptionPane.showMessageDialog(this, ex.getMessage());
+        }
+    }
 
     public void buscarTexto() {
 
@@ -406,6 +457,7 @@ public class Form1 extends javax.swing.JFrame {
     private javax.swing.JButton Buscar;
     private javax.swing.JButton Cargar;
     private javax.swing.JButton Ejecutar;
+    private javax.swing.JButton Exportar;
     private javax.swing.JLabel Fondo;
     private javax.swing.JButton Guardar;
     private javax.swing.JLabel IconoError;
@@ -414,6 +466,7 @@ public class Form1 extends javax.swing.JFrame {
     private javax.swing.JTextArea areaTexto;
     private javax.swing.JLabel estado;
     private javax.swing.JLabel jLabel1;
+    private javax.swing.JLabel jLabel2;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JScrollPane jScrollPane3;
