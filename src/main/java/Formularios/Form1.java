@@ -95,6 +95,8 @@ public class Form1 extends javax.swing.JFrame {
         jScrollPane3 = new javax.swing.JScrollPane();
         areaErrores = new javax.swing.JTextArea();
         Fondo = new javax.swing.JLabel();
+        jScrollPane2 = new javax.swing.JScrollPane();
+        AreaTexto = new javax.swing.JTextArea();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
@@ -182,6 +184,12 @@ public class Form1 extends javax.swing.JFrame {
         jPanel1.add(jScrollPane3, new org.netbeans.lib.awtextra.AbsoluteConstraints(260, 360, 710, 300));
         jPanel1.add(Fondo, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 0, 1130, 690));
 
+        AreaTexto.setColumns(20);
+        AreaTexto.setRows(5);
+        jScrollPane2.setViewportView(AreaTexto);
+
+        jPanel1.add(jScrollPane2, new org.netbeans.lib.awtextra.AbsoluteConstraints(790, 570, -1, -1));
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
@@ -221,6 +229,7 @@ public class Form1 extends javax.swing.JFrame {
         tokens = (ArrayList) analizador.getListaLexema().clone();
         //Metodo para mostrar tokes
         mostrarTokens();
+        analizador.mostrarTokens();
 
         //Verifica si existen errores
         if (verificarErrores()) {
@@ -329,7 +338,6 @@ public class Form1 extends javax.swing.JFrame {
         //Contador de errores
         int contErrores = 1;
         //Se limpia dos areas de texto
-        areaTexto.setText(null);
         areaErrores.setText(null);
 
         //Analiza el arraylist y clasifica los tokens
@@ -338,52 +346,52 @@ public class Form1 extends javax.swing.JFrame {
             //Si es entero lo pinta de morado
             if (lexema.getTipo().equals("Entero")) {
 
-                areaTexto.append(lexema.getLexema() + " " + lexema.getTipo());
+                AreaTexto.append(lexema.getLexema() + " " + lexema.getTipo());
 
             } //Si es decimal 
             else if (lexema.getTipo().equals("Decimal")) {
 
-                areaTexto.append(lexema.getLexema() + " " + lexema.getTipo());
+                AreaTexto.append(lexema.getLexema() + " " + lexema.getTipo());
             } //Si es cadena 
             else if (lexema.getTipo().equals("Cadena")) {
 
-                areaTexto.append(lexema.getLexema() + " " + lexema.getTipo());
+                AreaTexto.append(lexema.getLexema() + " " + lexema.getTipo());
             } //Si es booleano 
             else if (lexema.getTipo().equals("Booleano")) {
 
-                areaTexto.append(lexema.getLexema() + " " + lexema.getTipo());
+                AreaTexto.append(lexema.getLexema() + " " + lexema.getTipo());
             } //Si es caracter 
             else if (lexema.getTipo().equals("Caracter")) {
 
-                areaTexto.append(lexema.getLexema() + " " + lexema.getTipo());
+                AreaTexto.append(lexema.getLexema() + " " + lexema.getTipo());
             } //Si es un operador 
             else if (lexema.getTipo().equals("Operador")) {
 
-                areaTexto.append(lexema.getLexema() + " " + lexema.getTipo());
+                AreaTexto.append(lexema.getLexema() + " " + lexema.getTipo());
             } //Si es una asignacion 
             else if (lexema.getTipo().equals("Asignacion")) {
 
-                areaTexto.append(lexema.getLexema() + " " + lexema.getTipo());
+                AreaTexto.append(lexema.getLexema() + " " + lexema.getTipo());
             } //Si es un comentario 
             else if (lexema.getTipo().equals("Comentario")) {
 
-                areaTexto.append(lexema.getLexema() + " " + lexema.getTipo());
+                AreaTexto.append(lexema.getLexema() + " " + lexema.getTipo());
             } else if (lexema.getTipo().equals("Error")) {
 
-                areaTexto.append(lexema.getLexema());
+                AreaTexto.append(lexema.getLexema());
                 areaErrores.append(contErrores + ") " + lexema.getLexema() + " " + lexema.getTipo());
                 contErrores++;
                 areaErrores.append("\n");
             } else if (!lexema.getTipo().equals("Enter")) {
 
-                areaTexto.append(lexema.getLexema());
+                AreaTexto.append(lexema.getLexema());
             }
 
             //Inserta enters o espacios
             if (lexema.getTipo().equals("Enter")) {
-                areaTexto.append("\n");
+                AreaTexto.append("\n");
             } else {
-                areaTexto.append(" ");
+                AreaTexto.append(" ");
             }
 
         }
@@ -410,7 +418,7 @@ public class Form1 extends javax.swing.JFrame {
             archivo.showSaveDialog(this);
             if (archivo.getSelectedFile() != null) {
                 try (FileWriter guardado = new FileWriter(archivo.getSelectedFile())) {
-                    guardado.write(areaTexto.getText());
+                    guardado.write(AreaTexto.getText());
                     JOptionPane.showMessageDialog(rootPane, "El archivo fue guardado con éxito en la ruta establecida");
                 }
             }
@@ -424,7 +432,7 @@ public class Form1 extends javax.swing.JFrame {
             if (archivo.getSelectedFile() != null) {
                 try (FileWriter guardado = new FileWriter(archivo.getSelectedFile())) {
                     guardado.write(areaErrores.getText());
-                    JOptionPane.showMessageDialog(rootPane, "El archivo fue guardado con éxito en la ruta establecida");
+                    JOptionPane.showMessageDialog(rootPane, "El archivo de ERRORES fue guardado con éxito en la ruta establecida");
                 }
             }
         } catch (IOException ex) {
@@ -454,6 +462,7 @@ public class Form1 extends javax.swing.JFrame {
 
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JTextArea AreaTexto;
     private javax.swing.JButton Buscar;
     private javax.swing.JButton Cargar;
     private javax.swing.JButton Ejecutar;
@@ -469,6 +478,7 @@ public class Form1 extends javax.swing.JFrame {
     private javax.swing.JLabel jLabel2;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JScrollPane jScrollPane1;
+    private javax.swing.JScrollPane jScrollPane2;
     private javax.swing.JScrollPane jScrollPane3;
     private javax.swing.JLabel lblColumna;
     private javax.swing.JLabel lblLinea;

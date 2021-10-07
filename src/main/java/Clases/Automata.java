@@ -1232,6 +1232,7 @@ public class Automata {
                             break;
                         default:
                             tempToken += caracter;
+
                             break;
                     }
                     break;
@@ -1240,8 +1241,6 @@ public class Automata {
 
 
             /*Guarda los enters*/
-           
-
         }
     }
 
@@ -1280,24 +1279,22 @@ public class Automata {
                 break;
             case 66:
                 if (token.equals("entero")) {
-                    nuevoToken = new Lexema(token, "Verde", "Reservada");
+                    nuevoToken = new Lexema(token, "Verde", " ");
                     listaLexemas.add(nuevoToken);
                 } else if (token.equals("cadena")) {
-                    nuevoToken = new Lexema(token, "Verde", "Reservada");
+                    nuevoToken = new Lexema(token, "Verde", " ");
                     listaLexemas.add(nuevoToken);
                 } else if (token.equals("caracter")) {
-                    nuevoToken = new Lexema(token, "Verde", "Reservada");
+                    nuevoToken = new Lexema(token, "Verde", " ");
                     listaLexemas.add(nuevoToken);
                 } else if (token.equals("booleano")) {
-                    nuevoToken = new Lexema(token, "Verde", "Reservada");
+                    nuevoToken = new Lexema(token, "Verde", " ");
                     listaLexemas.add(nuevoToken);
 
                 } else if (token.equals("decimal")) {
-                    nuevoToken = new Lexema(token, "Verde", "Reservada");
+                    nuevoToken = new Lexema(token, "Verde", " ");
                     listaLexemas.add(nuevoToken);
-                } else if (token.equals("SI") || token.equals("SINO") || token.equals("SINO_SI") || token.equals("MIENTRAS") || token.equals("HACER") || token.equals("DESDE") || token.equals("HASTA") || token.equals("INCREMENTO") || token.equals("principal") || token.equals("escribir") || token.equals("leer")) {
-                    nuevoToken = new Lexema(token, "Verde", "Reservada");
-                    listaLexemas.add(nuevoToken);
+
                 } else {
                     nuevoToken = new Lexema(token, "Negro", "Error");
                     listaLexemas.add(nuevoToken);
@@ -1344,7 +1341,8 @@ public class Automata {
     public void mostrarTokens() {
         for (int i = 0; i < listaLexemas.size(); i++) {
             Lexema lexema = (Lexema) listaLexemas.get(i);
-            JOptionPane.showInputDialog(i + ") " + lexema.getLexema() + " " + lexema.getTipo());
+            //JOptionPane.showInputDialog(i + ") " + lexema.getLexema() + " " + lexema.getTipo());
+            JOptionPane.showMessageDialog(null,i + ") " + lexema.getLexema() + " " + lexema.getTipo());
 
         }
     }
@@ -1353,8 +1351,5 @@ public class Automata {
     public ArrayList getListaLexema() {
         return listaLexemas;
     }
-    
-      
-
 
 }
