@@ -9,26 +9,21 @@ import Clases.Archivo;
 import Clases.Automata;
 import Clases.Lexema;
 import java.awt.Color;
-import java.awt.Component;
 import java.awt.Image;
-import java.awt.event.KeyEvent;
-import java.awt.event.KeyListener;
-import java.awt.image.BufferedImage;
-import java.io.File;
+import java.awt.Toolkit;
+import java.awt.datatransfer.Clipboard;
+import java.awt.datatransfer.DataFlavor;
+import java.awt.datatransfer.StringSelection;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.logging.Level;
-import java.util.logging.Logger;
-import javax.imageio.ImageIO;
 import javax.swing.ImageIcon;
 import javax.swing.JFileChooser;
 import javax.swing.JOptionPane;
-import javax.swing.JTextArea;
 import javax.swing.text.BadLocationException;
-import javax.swing.text.Caret;
-import javax.swing.text.DefaultHighlighter;
-import javax.swing.text.Highlighter;
+import javax.swing.event.UndoableEditEvent;
+import javax.swing.event.UndoableEditListener;
+import javax.swing.undo.UndoManager;
 
 /**
  *
@@ -48,6 +43,13 @@ public class Form1 extends javax.swing.JFrame {
     ImageIcon Fondo1 = new ImageIcon("Fondo1.jpg");
     ImageIcon Icono = new ImageIcon("Error.png");
     ImageIcon lupa = new ImageIcon("Lupa.png");
+    ImageIcon Regreso = new ImageIcon("Flecha.png");
+    ImageIcon Adelanta = new ImageIcon("Flecha2.png");
+    ImageIcon Copi = new ImageIcon("Copiar.png");
+    ImageIcon Pega = new ImageIcon("Pegar.png");
+    private StringSelection tmp;
+
+    UndoManager editManager = new UndoManager();
 
     /**
      * Creates new form Form1
@@ -64,6 +66,17 @@ public class Form1 extends javax.swing.JFrame {
         Exportar.setIcon(new ImageIcon(Boton5.getImage().getScaledInstance(40, 40, Image.SCALE_SMOOTH)));
         Fondo.setIcon(new ImageIcon(Fondo1.getImage().getScaledInstance(1200, 690, Image.SCALE_SMOOTH)));
         Buscar.setIcon(new ImageIcon(lupa.getImage().getScaledInstance(25, 32, Image.SCALE_SMOOTH)));
+        BotonIzquierda.setIcon(new ImageIcon(Regreso.getImage().getScaledInstance(40, 40, Image.SCALE_SMOOTH)));
+        BotonDerecha.setIcon(new ImageIcon(Adelanta.getImage().getScaledInstance(40, 40, Image.SCALE_SMOOTH)));
+        Copiar.setIcon(new ImageIcon(Copi.getImage().getScaledInstance(40, 40, Image.SCALE_SMOOTH)));
+        Pegar.setIcon(new ImageIcon(Pega.getImage().getScaledInstance(40, 40, Image.SCALE_SMOOTH)));
+
+        areaTexto.getDocument().addUndoableEditListener(new UndoableEditListener() {
+            @Override
+            public void undoableEditHappened(UndoableEditEvent e) {
+                editManager.addEdit(e.getEdit());
+            }
+        });
 
     }
 
@@ -84,6 +97,10 @@ public class Form1 extends javax.swing.JFrame {
         Limpiar = new javax.swing.JButton();
         Guardar = new javax.swing.JButton();
         Exportar = new javax.swing.JButton();
+        Pegar = new javax.swing.JButton();
+        Copiar = new javax.swing.JButton();
+        BotonDerecha = new javax.swing.JButton();
+        BotonIzquierda = new javax.swing.JButton();
         estado = new javax.swing.JLabel();
         jLabel2 = new javax.swing.JLabel();
         Buscar = new javax.swing.JButton();
@@ -106,13 +123,13 @@ public class Form1 extends javax.swing.JFrame {
         lblLinea.setFont(new java.awt.Font("Dialog", 0, 14)); // NOI18N
         lblLinea.setForeground(new java.awt.Color(255, 255, 255));
         lblLinea.setText("Linea");
-        jPanel1.add(lblLinea, new org.netbeans.lib.awtextra.AbsoluteConstraints(270, 330, -1, -1));
+        jPanel1.add(lblLinea, new org.netbeans.lib.awtextra.AbsoluteConstraints(270, 360, -1, -1));
 
         lblColumna.setBackground(new java.awt.Color(255, 255, 255));
         lblColumna.setFont(new java.awt.Font("Dialog", 0, 14)); // NOI18N
         lblColumna.setForeground(new java.awt.Color(255, 255, 255));
         lblColumna.setText("Columna");
-        jPanel1.add(lblColumna, new org.netbeans.lib.awtextra.AbsoluteConstraints(350, 330, -1, -1));
+        jPanel1.add(lblColumna, new org.netbeans.lib.awtextra.AbsoluteConstraints(350, 360, -1, -1));
 
         Cargar.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -147,7 +164,35 @@ public class Form1 extends javax.swing.JFrame {
                 ExportarActionPerformed(evt);
             }
         });
-        jPanel1.add(Exportar, new org.netbeans.lib.awtextra.AbsoluteConstraints(1010, 270, 80, 40));
+        jPanel1.add(Exportar, new org.netbeans.lib.awtextra.AbsoluteConstraints(1010, 320, 80, 40));
+
+        Pegar.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                PegarActionPerformed(evt);
+            }
+        });
+        jPanel1.add(Pegar, new org.netbeans.lib.awtextra.AbsoluteConstraints(600, 20, 80, 40));
+
+        Copiar.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                CopiarActionPerformed(evt);
+            }
+        });
+        jPanel1.add(Copiar, new org.netbeans.lib.awtextra.AbsoluteConstraints(490, 20, 80, 40));
+
+        BotonDerecha.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                BotonDerechaActionPerformed(evt);
+            }
+        });
+        jPanel1.add(BotonDerecha, new org.netbeans.lib.awtextra.AbsoluteConstraints(380, 20, 80, 40));
+
+        BotonIzquierda.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                BotonIzquierdaActionPerformed(evt);
+            }
+        });
+        jPanel1.add(BotonIzquierda, new org.netbeans.lib.awtextra.AbsoluteConstraints(270, 20, 80, 40));
 
         estado.setForeground(new java.awt.Color(255, 255, 255));
         jPanel1.add(estado, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 40, 190, 40));
@@ -155,7 +200,7 @@ public class Form1 extends javax.swing.JFrame {
         jLabel2.setFont(new java.awt.Font("Dialog", 0, 14)); // NOI18N
         jLabel2.setForeground(new java.awt.Color(255, 255, 255));
         jLabel2.setText("Exportar Reportes");
-        jPanel1.add(jLabel2, new org.netbeans.lib.awtextra.AbsoluteConstraints(990, 310, 120, 60));
+        jPanel1.add(jLabel2, new org.netbeans.lib.awtextra.AbsoluteConstraints(990, 360, 120, 60));
 
         Buscar.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -175,13 +220,13 @@ public class Form1 extends javax.swing.JFrame {
         areaTexto.setRows(5);
         jScrollPane1.setViewportView(areaTexto);
 
-        jPanel1.add(jScrollPane1, new org.netbeans.lib.awtextra.AbsoluteConstraints(260, 30, 710, 290));
+        jPanel1.add(jScrollPane1, new org.netbeans.lib.awtextra.AbsoluteConstraints(260, 70, 710, 290));
 
         areaErrores.setColumns(20);
         areaErrores.setRows(5);
         jScrollPane3.setViewportView(areaErrores);
 
-        jPanel1.add(jScrollPane3, new org.netbeans.lib.awtextra.AbsoluteConstraints(260, 360, 710, 300));
+        jPanel1.add(jScrollPane3, new org.netbeans.lib.awtextra.AbsoluteConstraints(260, 380, 710, 300));
         jPanel1.add(Fondo, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 0, 1130, 690));
 
         AreaTexto.setColumns(20);
@@ -229,7 +274,7 @@ public class Form1 extends javax.swing.JFrame {
         tokens = (ArrayList) analizador.getListaLexema().clone();
         //Metodo para mostrar tokes
         mostrarTokens();
-        analizador.mostrarTokens();
+        //analizador.mostrarTokens();----------------------------------------------------------------------------------------
 
         //Verifica si existen errores
         if (verificarErrores()) {
@@ -260,6 +305,48 @@ public class Form1 extends javax.swing.JFrame {
         // TODO add your handling code here:\
         Reportes();
     }//GEN-LAST:event_ExportarActionPerformed
+
+    private void PegarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_PegarActionPerformed
+        // TODO add your handling code here:
+           Clipboard c = Toolkit.getDefaultToolkit().getSystemClipboard();
+                if (c.isDataFlavorAvailable(DataFlavor.stringFlavor)) {
+
+                    try {
+                        String temp = (String) c.getData(DataFlavor.stringFlavor);
+                        areaTexto.setText(areaTexto.getText() + temp);
+                    } catch (Exception a) {
+
+                    }
+                }
+    }//GEN-LAST:event_PegarActionPerformed
+
+    private void CopiarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_CopiarActionPerformed
+        // TODO add your handling code here:
+        try {
+            tmp = new StringSelection(areaTexto.getSelectedText());
+            Toolkit.getDefaultToolkit().getSystemClipboard().setContents(tmp, tmp);
+        } catch (Exception a) {
+
+        }
+    }//GEN-LAST:event_CopiarActionPerformed
+
+    private void BotonDerechaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_BotonDerechaActionPerformed
+        // TODO add your handling code here:
+        try {
+            editManager.redo();
+        } catch (Exception a) {
+
+        }
+    }//GEN-LAST:event_BotonDerechaActionPerformed
+
+    private void BotonIzquierdaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_BotonIzquierdaActionPerformed
+        // TODO add your handling code here:
+        try {
+            editManager.undo();
+        } catch (Exception a) {
+
+        }
+    }//GEN-LAST:event_BotonIzquierdaActionPerformed
 
     /**
      * @param args the command line arguments
@@ -294,6 +381,7 @@ public class Form1 extends javax.swing.JFrame {
                 new Form1().setVisible(true);
             }
         });
+
     }
 
     public void Trasparencia() {
@@ -309,6 +397,14 @@ public class Form1 extends javax.swing.JFrame {
         Buscar.setContentAreaFilled(false);
         Exportar.setOpaque(false);
         Exportar.setContentAreaFilled(false);
+        BotonIzquierda.setOpaque(false);
+        BotonIzquierda.setContentAreaFilled(false);
+        BotonDerecha.setOpaque(false);
+        BotonDerecha.setContentAreaFilled(false);
+        Copiar.setOpaque(false);
+        Copiar.setContentAreaFilled(false);
+        Pegar.setOpaque(false);
+        Pegar.setContentAreaFilled(false);
     }
 
     /*Regresa si encuentra errores*/
@@ -346,45 +442,58 @@ public class Form1 extends javax.swing.JFrame {
             //Si es entero lo pinta de morado
             if (lexema.getTipo().equals("Entero")) {
 
-                AreaTexto.append(lexema.getLexema() + " " + lexema.getTipo());
-
+                AreaTexto.append(i + ") " + lexema.getLexema() + " " + lexema.getTipo());
+                AreaTexto.append("\n");
             } //Si es decimal 
             else if (lexema.getTipo().equals("Decimal")) {
 
-                AreaTexto.append(lexema.getLexema() + " " + lexema.getTipo());
+                AreaTexto.append(i + ") " + lexema.getLexema() + " " + lexema.getTipo());
+                AreaTexto.append("\n");
             } //Si es cadena 
-            else if (lexema.getTipo().equals("Cadena")) {
+            else if (lexema.getTipo().equals("Literal")) {
 
-                AreaTexto.append(lexema.getLexema() + " " + lexema.getTipo());
+                AreaTexto.append(i + ") " + lexema.getLexema() + " " + lexema.getTipo());
+                AreaTexto.append("\n");
             } //Si es booleano 
             else if (lexema.getTipo().equals("Booleano")) {
 
-                AreaTexto.append(lexema.getLexema() + " " + lexema.getTipo());
+                AreaTexto.append(i + ") " + lexema.getLexema() + " " + lexema.getTipo());
+                AreaTexto.append("\n");
             } //Si es caracter 
             else if (lexema.getTipo().equals("Caracter")) {
 
-                AreaTexto.append(lexema.getLexema() + " " + lexema.getTipo());
+                AreaTexto.append(i + ") " + lexema.getLexema() + " " + lexema.getTipo());
+                AreaTexto.append("\n");
             } //Si es un operador 
             else if (lexema.getTipo().equals("Operador")) {
 
-                AreaTexto.append(lexema.getLexema() + " " + lexema.getTipo());
+                AreaTexto.append(i + ") " + lexema.getLexema() + " " + lexema.getTipo());
+                AreaTexto.append("\n");
             } //Si es una asignacion 
             else if (lexema.getTipo().equals("Asignacion")) {
 
-                AreaTexto.append(lexema.getLexema() + " " + lexema.getTipo());
+                AreaTexto.append(i + " " + lexema.getLexema() + " " + lexema.getTipo());
+                AreaTexto.append("\n");
             } //Si es un comentario 
             else if (lexema.getTipo().equals("Comentario")) {
 
-                AreaTexto.append(lexema.getLexema() + " " + lexema.getTipo());
+                AreaTexto.append(i + ") " + lexema.getLexema() + " " + lexema.getTipo());
+                AreaTexto.append("\n");
             } else if (lexema.getTipo().equals("Error")) {
 
                 AreaTexto.append(lexema.getLexema());
                 areaErrores.append(contErrores + ") " + lexema.getLexema() + " " + lexema.getTipo());
                 contErrores++;
                 areaErrores.append("\n");
+            } //Si es una palabra reservada lo pinta de verde
+            else if (lexema.getTipo().equals("Reservada")) {
+
+                AreaTexto.append(i + ") " + lexema.getLexema() + " " + lexema.getTipo());
+                AreaTexto.append("\n");
             } else if (!lexema.getTipo().equals("Enter")) {
 
-                AreaTexto.append(lexema.getLexema());
+                AreaTexto.append(i + ") " + lexema.getLexema() + " " + lexema.getTipo());
+                AreaTexto.append("\n");
             }
 
             //Inserta enters o espacios
@@ -411,7 +520,7 @@ public class Form1 extends javax.swing.JFrame {
             JOptionPane.showMessageDialog(this, ex.getMessage());
         }
     }
-    
+
     public void Reportes() {
         try {
             JFileChooser archivo = new JFileChooser(System.getProperty("user.dir"));
@@ -425,8 +534,8 @@ public class Form1 extends javax.swing.JFrame {
         } catch (IOException ex) {
             JOptionPane.showMessageDialog(this, ex.getMessage());
         }
-        
-            try {
+
+        try {
             JFileChooser archivo = new JFileChooser(System.getProperty("user.dir"));
             archivo.showSaveDialog(this);
             if (archivo.getSelectedFile() != null) {
@@ -463,14 +572,18 @@ public class Form1 extends javax.swing.JFrame {
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JTextArea AreaTexto;
+    private javax.swing.JButton BotonDerecha;
+    private javax.swing.JButton BotonIzquierda;
     private javax.swing.JButton Buscar;
     private javax.swing.JButton Cargar;
+    private javax.swing.JButton Copiar;
     private javax.swing.JButton Ejecutar;
     private javax.swing.JButton Exportar;
     private javax.swing.JLabel Fondo;
     private javax.swing.JButton Guardar;
     private javax.swing.JLabel IconoError;
     private javax.swing.JButton Limpiar;
+    private javax.swing.JButton Pegar;
     private javax.swing.JTextArea areaErrores;
     private javax.swing.JTextArea areaTexto;
     private javax.swing.JLabel estado;
